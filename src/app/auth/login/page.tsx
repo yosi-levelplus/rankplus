@@ -20,13 +20,13 @@ export default function LoginPage() {
 
     try {
       if (isSignUp) {
-        const { data, error } = await supabase.auth.signUp({ email, password })
-        if (error) throw error
-        if (data.session) {
-          window.location.href = '/dashboard'
-          return
-        }
-        alert('Check your email to confirm your account')
+        const { error: signUpError } = await supabase.auth.signUp({ email, password })
+        if (signUpError) throw signUpError
+        // After signup, immediately sign in
+        const { error: signInError } = await supabase.auth.signInWithPassword({ email, password })
+        if (signInError) throw signInError
+        window.location.href = '/dashboard'
+        return
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password })
         if (error) throw error
