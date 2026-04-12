@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-rank-primary: #4F46E5;
+  --color-rank-primary-dark: #4338CA;
+  --color-rank-secondary: #3B82F6;
+  --color-rank-accent: #10B981;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: rgb(3, 7, 18);
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-rank-primary hover:bg-rank-primary-dark text-white font-medium py-2 px-4 rounded-lg transition-colors;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg transition-colors;
+  }
+
+  .card-base {
+    @apply bg-gray-900 border border-gray-800 rounded-lg shadow-lg;
+  }
+}
