@@ -91,39 +91,42 @@ export interface Database {
       clients: {
         Row: {
           id: string
-          organization_id: string
+          org_id: string
+          business_name: string
+          website_url: string | null
+          google_place_id: string | null
+          business_address: string | null
+          business_lat: number | null
+          business_lng: number | null
+          is_archived: boolean
           created_at: string
           updated_at: string
-          name: string
-          website_url: string
-          location: string | null
-          industry: string | null
-          status: 'active' | 'paused' | 'archived'
-          metadata: Json | null
         }
         Insert: {
           id?: string
-          organization_id: string
+          org_id: string
+          business_name: string
+          website_url?: string | null
+          google_place_id?: string | null
+          business_address?: string | null
+          business_lat?: number | null
+          business_lng?: number | null
+          is_archived?: boolean
           created_at?: string
           updated_at?: string
-          name: string
-          website_url: string
-          location?: string | null
-          industry?: string | null
-          status?: 'active' | 'paused' | 'archived'
-          metadata?: Json | null
         }
         Update: {
           id?: string
-          organization_id?: string
+          org_id?: string
+          business_name?: string
+          website_url?: string | null
+          google_place_id?: string | null
+          business_address?: string | null
+          business_lat?: number | null
+          business_lng?: number | null
+          is_archived?: boolean
           created_at?: string
           updated_at?: string
-          name?: string
-          website_url?: string
-          location?: string | null
-          industry?: string | null
-          status?: 'active' | 'paused' | 'archived'
-          metadata?: Json | null
         }
       }
       seo_keywords: {
@@ -305,6 +308,70 @@ export interface Database {
           impact_level?: 'low' | 'medium' | 'high'
           status?: 'open' | 'resolved'
           notes?: string | null
+        }
+      }
+      campaigns: {
+        Row: {
+          id: string
+          org_id: string
+          client_id: string
+          name: string
+          grid_size: number
+          radius_miles: number
+          scan_frequency: string
+          status: string
+          last_run_at: string | null
+          next_run_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          org_id: string
+          client_id: string
+          name: string
+          grid_size?: number
+          radius_miles?: number
+          scan_frequency?: string
+          status?: string
+          last_run_at?: string | null
+          next_run_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          org_id?: string
+          client_id?: string
+          name?: string
+          grid_size?: number
+          radius_miles?: number
+          scan_frequency?: string
+          status?: string
+          last_run_at?: string | null
+          next_run_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      campaign_keywords: {
+        Row: {
+          id: string
+          campaign_id: string
+          keyword: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          campaign_id: string
+          keyword: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          campaign_id?: string
+          keyword?: string
+          created_at?: string
         }
       }
       api_usage_log: {
