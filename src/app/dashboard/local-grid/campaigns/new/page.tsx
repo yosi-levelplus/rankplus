@@ -1,4 +1,3 @@
-// @ts-nocheck
 'use client';
 
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
@@ -634,7 +633,7 @@ export default function NewCampaignPage() {
         .single();
 
       if (!membership) throw new Error('No organization found. Please join an organization first.');
-      const orgId = (membership as any).org_id;
+      const orgId = membership.org_id;
 
       // 0b. Find or create client for this business
       setScanProgress('Setting up business client...');
@@ -648,7 +647,7 @@ export default function NewCampaignPage() {
         .single();
 
       if (existingClient) {
-        clientId = (existingClient as any).id;
+        clientId = existingClient.id;
       } else {
         const { data: newClient, error: clientErr } = await supabase
           .from('clients')
@@ -664,7 +663,7 @@ export default function NewCampaignPage() {
           .select()
           .single();
         if (clientErr) throw new Error(`Client creation failed: ${clientErr.message}`);
-        clientId = (newClient as any).id;
+        clientId = newClient.id;
       }
 
       // 1. Create campaign in DB
