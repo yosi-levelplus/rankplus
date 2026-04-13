@@ -627,13 +627,13 @@ export default function NewCampaignPage() {
       setScanProgress('Loading organization...');
       const { data: membership } = await supabase
         .from('organization_members')
-        .select('organization_id')
+        .select('org_id')
         .eq('user_id', userId)
         .limit(1)
         .single();
 
       if (!membership) throw new Error('No organization found. Please join an organization first.');
-      const orgId = membership.organization_id;
+      const orgId = membership.org_id;
 
       // 0b. Find or create client for this business
       setScanProgress('Setting up business client...');
