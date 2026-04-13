@@ -633,7 +633,7 @@ export default function NewCampaignPage() {
         .single();
 
       if (!membership) throw new Error('No organization found. Please join an organization first.');
-      const orgId = membership.org_id;
+      const orgId = (membership as any).org_id;
 
       // 0b. Find or create client for this business
       setScanProgress('Setting up business client...');
