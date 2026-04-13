@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@/lib/supabase/client';
 
 /* ─── Types ─── */
 type Unit = 'km' | 'mi';
@@ -180,7 +180,7 @@ function BusinessSearch({ onSelect, selectedBusiness }: { onSelect: (biz: Busine
   const [results, setResults] = useState<Business[]>([]);
   const [loading, setLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
-  const supabase = createClientComponentClient();
+  const supabase = createClient();
 
   const searchBusinesses = async () => {
     if (!query.trim()) return;
@@ -553,7 +553,7 @@ export default function NewCampaignPage() {
   const [scanError, setScanError] = useState('');
   const [scanProgress, setScanProgress] = useState('');
 
-  const supabase = createClientComponentClient();
+  const supabase = createClient();
 
   const selectedGrid = GRID_OPTIONS.find(g => g.value === grid)!;
   const selectedSchedule = SCHEDULE_OPTIONS.find(s => s.value === schedule)!;
