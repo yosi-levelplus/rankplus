@@ -647,7 +647,7 @@ export default function NewCampaignPage() {
         .single();
 
       if (existingClient) {
-        clientId = existingClient.id;
+        clientId = (existingClient as any).id;
       } else {
         const { data: newClient, error: clientErr } = await supabase
           .from('clients')
@@ -663,7 +663,7 @@ export default function NewCampaignPage() {
           .select()
           .single();
         if (clientErr) throw new Error(`Client creation failed: ${clientErr.message}`);
-        clientId = newClient.id;
+        clientId = (newClient as any).id;
       }
 
       // 1. Create campaign in DB
