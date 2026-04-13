@@ -617,16 +617,62 @@ export default function NewCampaignPage() {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const token = session?.access_token || '';
+      const userId = session?.user?.id || '';
       const bizName = selectedBusiness.title || selectedBusiness.name || '';
       const placeId = selectedBusiness.place_id || selectedBusiness.cid || '';
       const radiusMiles = toMiles(radiusKm);
       const validKws = keywords.filter(k => k.trim());
+
+      // 0. Get user's organization
+      setScanProgress('Loading organization...');
+      const { data: membership } = await supabase
+        .from('organization_members')
+        .select('organization_id')
+        .eq('user_id', userId)
+        .limit(1)
+        .single();
+
+      if (!membership) throw new Error('No organization found. Please join an organization first.');
+      const orgId = membership.organization_id;
+
+      // 0b. Find or create client for this business
+      setScanProgress('Setting up business client...');
+      let clientId: string;
+      const { data: existingClient } = await supabase
+        .from('clients')
+        .select('id')
+        .eq('org_id', orgId)
+        .eq('business_name', bizName)
+        .limit(1)
+        .single();
+
+      if (existingClient) {
+        clientId = existingClient.id;
+      } else {
+        const { data: newClient, error: clientErr } = await supabase
+          .from('clients')
+          .insert({
+            org_id: orgId,
+            business_name: bizName,
+            website_url: selectedBusiness.website || '',
+            google_place_id: placeId || null,
+            business_address: selectedBusiness.address || null,
+            business_lat: bizLat || null,
+            business_lng: bizLng || null,
+          })
+          .select()
+          .single();
+        if (clientErr) throw new Error(`Client creation failed: ${clientErr.message}`);
+        clientId = newClient.id;
+      }
 
       // 1. Create campaign in DB
       setScanProgress('Saving campaign to database...');
       const { data: campaign, error: campaignErr } = await supabase
         .from('campaigns')
         .insert({
+          org_id: orgId,
+          client_id: clientId,
           name,
           grid_size: gridSize,
           radius_miles: radiusMiles,
